@@ -1,38 +1,44 @@
-PhonePe Payment Gateway Integration
-This project provides a PHP-based integration for the PhonePe Payment Gateway, enabling secure online payments for e-commerce applications. It includes functionality to initiate payments, process payment responses, and store order details in a MySQL database. The integration supports both UAT (testing) and PROD (production) environments.
-Table of Contents
+PhonePe Payment Gateway Integration 🚀
+A sleek PHP-based integration for PhonePe Payment Gateway 
+Welcome to the PhonePe Payment Gateway Integration for e-commerce applications! This project provides a secure, robust, and user-friendly way to process online payments using PhonePe. Built for SAF Accessories, it supports both UAT (testing) and PROD (production) environments with a stylish receipt page powered by Tailwind CSS. 🎨
 
-Overview
-Prerequisites
-Installation
-Configuration
-Usage
-Collecting Customer Details
-File Structure
-Database Schema
-Troubleshooting
-Contributing
-License
+📑 Table of Contents
 
-Overview
-The PhonePe Payment Gateway integration allows merchants to:
+✨ Overview
+🛠 Prerequisites
+📥 Installation
+⚙️ Configuration
+🚀 Usage
+👤 Collecting Customer Details
+📂 File Structure
+🗄 Database Schema
+🔍 Troubleshooting
+🤝 Contributing
+📜 License
 
-Authenticate with PhonePe using client credentials.
-Initiate payments with cart details and redirect users to the PhonePe checkout page.
-Process payment responses, display receipts, and store order details.
-Collect customer details (name, email, address) during payment initiation and pass them to the response page.
 
-The integration is built for SAF Accessories, an online retailer, and includes a responsive receipt page with Tailwind CSS styling.
-Prerequisites
+✨ Overview
+This project empowers merchants to:
 
-PHP: Version 7.4 or higher with curl and pdo_mysql extensions enabled.
-MySQL: Version 5.7 or higher.
-PhonePe Merchant Account: Obtain Client ID, Client Secret, and Client Version from PhonePe.
-Web Server: Apache or Nginx with HTTPS configured.
-Composer: Optional for dependency management (not used in this project).
-Tailwind CSS: Included via CDN for styling the receipt page.
+🔐 Authenticate with PhonePe using client credentials.
+💸 Initiate payments with cart and customer details, redirecting users to PhonePe's checkout.
+📄 Process responses, display a responsive receipt, and store orders in a MySQL database.
+📋 Collect customer details (name, email, address) during payment initiation.
 
-Installation
+Designed for SAF Accessories, the integration features a modern receipt page with Tailwind CSS, ensuring a delightful user experience. 🌟
+
+🛠 Prerequisites
+Before you begin, ensure you have:
+
+PHP: 7.4+ with curl and pdo_mysql extensions enabled.
+MySQL: 5.7+ for storing order and customer data.
+PhonePe Merchant Account: Client ID, Client Secret, and Client Version from PhonePe.
+Web Server: Apache/Nginx with HTTPS enabled.
+Tailwind CSS: Included via CDN (https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css).
+
+
+📥 Installation
+Follow these steps to set up the project:
 
 Clone the Repository:
 git clone https://github.com/your-repo/phonepe-payment-gateway.git
@@ -42,54 +48,72 @@ cd phonepe-payment-gateway
 Set Up the Database:
 
 Create a MySQL database (e.g., saf_accessories).
-Ensure the orders and customers tables are set up (see Database Schema).
+Set up the orders and customers tables (see Database Schema).
 
 
 Copy Files:
 
-Place config.php, initiate_payment.php, and payment_response.php in your web server's root directory (e.g., /var/www/html).
+Place config.php, initiate_payment.php, and payment_response.php in your web server’s root (e.g., /var/www/html).
 
 
-Install Dependencies:
+Verify Dependencies:
 
-No external PHP dependencies are required, as the project uses native PHP cURL and PDO.
-Ensure Tailwind CSS CDN is accessible (https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css).
+No external PHP libraries required (uses native cURL and PDO).
+Ensure Tailwind CSS CDN is accessible.
 
 
 
-Configuration
-Edit config.php to set up your PhonePe and database credentials:
+
+⚙️ Configuration
+Update config.php with your PhonePe and database credentials:
 <?php
 // PhonePe Configuration
-define('PHONEPE_ENV', 'UAT'); // Set to 'UAT' for testing, 'PROD' for production
-define('PHONEPE_CLIENT_ID', 'your_client_id'); // Replace with your Client ID
-define('PHONEPE_CLIENT_SECRET', 'your_client_secret'); // Replace with your Client Secret
-define('PHONEPE_CLIENT_VERSION', '1'); // Replace with your Client Version (1 for UAT)
+define('PHONEPE_ENV', 'UAT'); // 'UAT' for testing, 'PROD' for production
+define('PHONEPE_CLIENT_ID', 'your_client_id'); // Your Client ID
+define('PHONEPE_CLIENT_SECRET', 'your_client_secret'); // Your Client Secret
+define('PHONEPE_CLIENT_VERSION', '1'); // Client Version (1 for UAT)
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'saf_accessories'); // Replace with your database name
+define('DB_NAME', 'saf_accessories'); // Your database name
 define('DB_USER', 'your_db_user');
 define('DB_PASS', 'your_db_password');
 ?>
 
 
-PHONEPE_ENV: Use UAT for testing or PROD for production.
-Client Credentials: Obtain from PhonePe's merchant dashboard.
-Database Credentials: Ensure they match your MySQL setup.
 
-Usage
 
-Initiate Payment:
+Field
+Description
 
-Send a POST request to initiate_payment.php with the following parameters:
+
+
+PHONEPE_ENV
+Set to UAT for testing or PROD for live.
+
+
+PHONEPE_CLIENT_ID
+Your PhonePe Client ID.
+
+
+PHONEPE_CLIENT_SECRET
+Your PhonePe Client Secret.
+
+
+DB_NAME
+Your MySQL database name.
+
+
+
+🚀 Usage
+1. Initiate Payment
+Send a POST request to initiate_payment.php with:
+
 merchantOrderId: Unique order ID (string).
 amount: Payment amount in INR (float).
-redirectUrl: URL to redirect after payment (string).
-cart: Array of cart items (product_id, product_name, product_price, quantity).
+redirectUrl: Redirect URL after payment (string).
+cart: Array of items (product_id, product_name, product_price, quantity).
 customer: Array with customer details (name, email, address).
 
-
-
-Example AJAX call from cart.php:
+Example AJAX Call (from cart.php):
 $.ajax({
     url: 'initiate_payment.php',
     type: 'POST',
@@ -115,192 +139,41 @@ $.ajax({
     }
 });
 
+2. Process Payment Response
 
-Process Payment Response:
+PhonePe redirects to payment_response.php after payment.
+The script verifies the status, saves order details, and displays a styled receipt.
 
-After payment, PhonePe redirects to payment_response.php.
-The script verifies the payment status, saves order details, and displays a receipt.
-The receipt includes customer details, order items, payment status, and company information.
-
-
-Print or Refund:
+3. Print or Refund
 
 Users can print the receipt or initiate a refund (if payment is completed) from the receipt page.
 
 
+👤 Collecting Customer Details
+Customer details (name, email, address) are collected in initiate_payment.php and passed to payment_response.php via session storage.
+Updated initiate_payment.php
+Handles customer POST data and stores it in $_SESSION['customer_data']:
+$customer = isset($_POST['customer']) && is_array($_POST['customer']) ? $_POST['customer'] : [];
+$customerDetails = [
+    'name' => filter_var($customer['name'] ?? 'Guest User', FILTER_SANITIZE_STRING),
+    'email' => filter_var($customer['email'] ?? 'N/A', FILTER_SANITIZE_EMAIL),
+    'address' => filter_var($customer['address'] ?? 'N/A', FILTER_SANITIZE_STRING)
+];
+$_SESSION['customer_data'] = $customerDetails;
 
-Collecting Customer Details
-To collect customer details in initiate_payment.php and pass them to payment_response.php, the following changes are implemented:
-Modifications in initiate_payment.php
-
-Collect Customer Data:
-
-Added handling for customer POST parameter (name, email, address).
-Sanitized and validated customer details.
-Stored customer details in the session for use in payment_response.php.
-
-
-Updated Code (replace the existing initiate_payment.php POST processing section):
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $merchantOrderId = filter_input(INPUT_POST, 'merchantOrderId', FILTER_SANITIZE_STRING) ?? '';
-    $amount = (int)(floatval(filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) ?? 0) * 100);
-    $redirectUrl = filter_input(INPUT_POST, 'redirectUrl', FILTER_SANITIZE_URL) ?? '';
-    $cartItems = isset($_POST['cart']) && is_array($_POST['cart']) ? $_POST['cart'] : [];
-    $customer = isset($_POST['customer']) && is_array($_POST['customer']) ? $_POST['customer'] : [];
-
-    // Validate required fields
-    if (empty($merchantOrderId) || $amount <= 0 || empty($redirectUrl)) {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Missing or invalid required fields']);
-        exit;
-    }
-
-    // Validate and sanitize customer details
-    $customerDetails = [
-        'name' => filter_var($customer['name'] ?? 'Guest User', FILTER_SANITIZE_STRING),
-        'email' => filter_var($customer['email'] ?? 'N/A', FILTER_SANITIZE_EMAIL),
-        'address' => filter_var($customer['address'] ?? 'N/A', FILTER_SANITIZE_STRING)
-    ];
-    if (!$customerDetails['email'] || !filter_var($customerDetails['email'], FILTER_VALIDATE_EMAIL)) {
-        $customerDetails['email'] = 'N/A';
-    }
-
-    // Validate and sanitize cart items
-    $sanitizedCart = [];
-    if (!empty($cartItems)) {
-        foreach ($cartItems as $item) {
-            $product_id = filter_var($item['product_id'] ?? '', FILTER_SANITIZE_STRING);
-            $product_name = filter_var($item['product_name'] ?? '', FILTER_SANITIZE_STRING);
-            $product_price = floatval($item['product_price'] ?? 0);
-            $quantity = intval($item['quantity'] ?? 0);
-            if ($product_id && $product_name && $product_price > 0 && $quantity > 0) {
-                $sanitizedCart[] = [
-                    'product_id' => $product_id,
-                    'product_name' => $product_name,
-                    'product_price' => $product_price,
-                    'quantity' => $quantity
-                ];
-            }
-        }
-    }
-
-    // Verify amount matches cart total
-    $calculatedTotal = 0;
-    foreach ($sanitizedCart as $item) {
-        $calculatedTotal += $item['product_price'] * $item['quantity'];
-    }
-    $shipping = ($calculatedTotal > 499) ? 0 : 1;
-    $calculatedTotal += $shipping;
-    if (abs($calculatedTotal * 100 - $amount) > 1) {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Amount does not match cart total']);
-        exit;
-    }
-
-    // Store cart, customer, and order details in session
-    $_SESSION['cart_data'] = $sanitizedCart;
-    $_SESSION['customer_data'] = $customerDetails;
-    $_SESSION['merchantOrderId'] = $merchantOrderId;
-    $_SESSION['order_amount'] = $amount;
-
-    // Prepare payment request
-    $payUrl = PHONEPE_BASE_URLS[PHONEPE_ENV]['pay'];
-    $payHeaders = [
-        'Content-Type: application/json',
-        'Authorization: O-Bearer ' . $_SESSION['access_token'],
-    ];
-    $payData = [
-        'merchantOrderId' => $merchantOrderId,
-        'amount' => $amount,
-        'expireAfter' => 1200,
-        'paymentFlow' => [
-            'type' => 'PG_CHECKOUT',
-            'message' => 'Payment for order ' . $merchantOrderId,
-            'merchantUrls' => [
-                'redirectUrl' => $redirectUrl,
-            ],
-        ],
-        'additionalData' => [
-            'cart' => $sanitizedCart,
-            'customer' => $customerDetails
-        ]
-    ];
-
-    $payResponse = makeCurlRequest($payUrl, 'POST', $payHeaders, json_encode($payData));
-    $payDataResponse = json_decode($payResponse['response'], true);
-
-    if ($payResponse['httpCode'] != 200 || !isset($payDataResponse['redirectUrl'])) {
-        header('Content-Type: application/json');
-        $errorMessage = isset($payDataResponse['message']) ? $payDataResponse['message'] : 'Unknown error';
-        echo json_encode(['success' => false, 'message' => 'Failed to create payment: ' . $errorMessage]);
-        exit;
-    }
-
-    $_SESSION['orderId'] = $payDataResponse['orderId'];
-    header('Content-Type: application/json');
-    echo json_encode([
-        'success' => true,
-        'redirectUrl' => $payDataResponse['redirectUrl']
-    ]);
-    exit;
-}
-
-
-
-Modifications in payment_response.php
-
-Retrieve Customer Data:
-
-Fetch customer details from $_SESSION['customer_data'] if available.
-Fall back to database or guest details if session data is missing.
-
-
-Updated Code (replace the customer details section in payment_response.php):
-// Retrieve cart and user data
-$cartItems = $_SESSION['cart_data'] ?? [];
+Updated payment_response.php
+Retrieves customer details from $_SESSION['customer_data'] or falls back to database/guest details:
 $customerDetails = $_SESSION['customer_data'] ?? null;
-
-// Check if user is logged in or use session customer details
-try {
-    if ($customerDetails) {
-        // Use customer details from session
-        $userDetails = [
-            'id' => null,
-            'name' => $customerDetails['name'],
-            'email' => $customerDetails['email'],
-            'address' => $customerDetails['address']
-        ];
-    } elseif (isset($_SESSION['user_id'])) {
-        // Fetch customer details from the customers table
-        $stmt = $pdo->prepare("
-            SELECT id, fullname, email, address
-            FROM customers
-            WHERE id = :user_id
-        ");
-        $stmt->execute([':user_id' => $_SESSION['user_id']]);
-        $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-        $userDetails = $customer ? [
-            'id' => $customer['id'],
-            'name' => $customer['fullname'],
-            'email' => $customer['email'],
-            'address' => $customer['address']
-        ] : [
-            'id' => null,
-            'name' => 'Guest User',
-            'email' => 'N/A',
-            'address' => 'N/A'
-        ];
-    } else {
-        // Fallback to guest details
-        $userDetails = [
-            'id' => null,
-            'name' => 'Guest User',
-            'email' => 'N/A',
-            'address' => 'N/A'
-        ];
-    }
-} catch (PDOException $e) {
-    error_log("Failed to fetch customer details: " . $e->getMessage());
+if ($customerDetails) {
+    $userDetails = [
+        'id' => null,
+        'name' => $customerDetails['name'],
+        'email' => $customerDetails['email'],
+        'address' => $customerDetails['address']
+    ];
+} elseif (isset($_SESSION['user_id'])) {
+    // Fetch from customers table
+} else {
     $userDetails = [
         'id' => null,
         'name' => 'Guest User',
@@ -309,40 +182,29 @@ try {
     ];
 }
 
-
-Clear Session Data:
-
-Ensure customer data is cleared when the payment is completed:
-
+Session data is cleared after a successful payment:
 if ($state === 'COMPLETED') {
-    unset($_SESSION['cart']);
-    unset($_SESSION['cart_data']);
     unset($_SESSION['customer_data']);
-    unset($_SESSION['merchantOrderId']);
-    unset($_SESSION['orderId']);
-    unset($_SESSION['order_amount']);
-    unset($_SESSION['access_token']);
-    unset($_SESSION['expires_at']);
+    // Other session variables
 }
 
 
-
-File Structure
+📂 File Structure
 phonepe-payment-gateway/
-├── config.php              # Configuration for PhonePe and database
-├── initiate_payment.php    # Initiates payment and redirects to PhonePe
-├── payment_response.php    # Processes payment response and displays receipt
-├── assets/
-│   └── images/
-│       └── logo.png        # Company logo
-├── index.php               # (Optional) Main page or cart page
-├── cart.php                # (Optional) Cart page for initiating payment
-└── README.md               # Project documentation
+├── 📜 config.php              # PhonePe and database config
+├── 📜 initiate_payment.php    # Payment initiation logic
+├── 📜 payment_response.php    # Payment response and receipt
+├── 📂 assets/
+│   └── 📂 images/
+│       └── 🖼 logo.png        # SAF Accessories logo
+├── 📜 index.php               # (Optional) Main page
+├── 📜 cart.php                # (Optional) Cart page
+└── 📜 README.md               # You're here!
 
-Database Schema
-The integration uses two tables: orders and customers.
+
+🗄 Database Schema
 Orders Table
-Created automatically by payment_response.php:
+Auto-created by payment_response.php:
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT DEFAULT NULL,
@@ -367,7 +229,7 @@ CREATE TABLE orders (
 );
 
 Customers Table
-Create manually or via your application:
+Create manually:
 CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fullname VARCHAR(255) NOT NULL,
@@ -376,22 +238,48 @@ CREATE TABLE customers (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-Troubleshooting
 
-Auth Token Failure: Verify Client ID, Client Secret, and Client Version in config.php.
-Payment Initiation Failure: Ensure cart and customer data are correctly formatted in the POST request.
-Database Errors: Check database credentials and ensure the orders and customers tables exist.
-Redirect Issues: Confirm redirectUrl is HTTPS and accessible.
-Styling Issues: Ensure the Tailwind CSS CDN is accessible.
+🔍 Troubleshooting
 
-Contributing
-Contributions are welcome! Please:
 
-Fork the repository.
-Create a feature branch (git checkout -b feature/YourFeature).
-Commit changes (git commit -m 'Add YourFeature').
-Push to the branch (git push origin feature/YourFeature).
-Open a pull request.
 
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+Issue
+Solution
+
+
+
+Auth Token Failure
+Verify Client ID/Secret in config.php. Check PHONEPE_ENV.
+
+
+Payment Initiation Failure
+Ensure cart and customer POST data are valid JSON.
+
+
+Database Errors
+Check DB credentials and table existence.
+
+
+Redirect Issues
+Use HTTPS for redirectUrl and ensure it’s accessible.
+
+
+Styling Issues
+Confirm Tailwind CSS CDN availability.
+
+
+
+🤝 Contributing
+We love contributions! To get started:
+
+🍴 Fork the repository.
+🌿 Create a feature branch (git checkout -b feature/YourFeature).
+💾 Commit changes (git commit -m 'Add YourFeature').
+🚀 Push to the branch (git push origin feature/YourFeature).
+📬 Open a pull request.
+
+
+📜 License
+This project is licensed under the MIT License. Feel free to use, modify, and distribute! 🎉
+
+Built with 💖 by SAF AccessoriesFor support, contact: shaktitripathi12298@gmail.com | 📞 +91 7310213636
