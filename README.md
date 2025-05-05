@@ -1,5 +1,3 @@
-Here's a **visually engaging and well-structured `README.md` UI design** using Markdown syntax, optimized for GitHub or any markdown viewer. The layout is stylish, emoji-driven, and easy to navigate:
-
 ---
 
 # 🌟 PhonePe Payment Gateway Integration
