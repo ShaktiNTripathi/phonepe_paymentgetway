@@ -1,5 +1,3 @@
----
-
 # 🌟 PhonePe Payment Gateway Integration
 
 *A Modern, Secure, and Stylish PHP Integration for PhonePe Payments*
